@@ -1,5 +1,6 @@
 local w = {}
 function w.create_output_window()
+	local config = require("ai-docstring").config
 	local buf = vim.api.nvim_create_buf(false, true) -- unlisted, scratch buffer
 	local current_buf = vim.api.nvim_get_current_buf() or 0
 	local width = math.floor(vim.o.columns * 0.7)
@@ -37,6 +38,8 @@ function w.create_output_window()
 		col = col,
 		style = "minimal",
 		border = "rounded",
+		title = "al-docstring | " .. config.ai.model,
+		footer = config.accept_key .. ": Accept docstring | " .. config.decline_key .. ": Discard docstring",
 	})
 
 	return buf, win
