@@ -1,5 +1,4 @@
 local m = {}
-
 function m.get_function_range()
 	local ft = vim.bo.filetype
 	if ft == "lua" then
@@ -27,7 +26,6 @@ function m.generate_doc_for_function()
 		vim.notify("No function found under cursor")
 		return
 	end
-
 	vim.cmd(string.format("normal! %dGV%dG", start_line, end_line))
 	vim.cmd("normal! ")
 	if vim.bo.filetype == "python" then
@@ -38,18 +36,14 @@ function m.generate_doc_for_function()
 	vim.cmd("normal! ")
 	local func = m.get_function_text(start_line - 1, end_line)
 	local ai = require("ai-docstring.utils.ai-wrapper")
-	print(ai.ask(table.concat(func, ""):gsub("\n", "#NL#")))
-	-- Optional: leave visual mode afterward
+	ai.query(table.concat(func, ""))
 end
 
 function m.setup(opts)
+	m.config = require("ai-docstring.config")
 	opts = opts or {}
-	local keymap = opts.keymap or "<leader>od"
-	vim.keymap.set("n", keymap, m.generate_doc_for_function, {
-		desc = "generate docstring",
-		silent = true,
-	})
-	vim.keymap.set("n", "<leader>ot", require("ai-docstring.utils.python-helper").InsertIndentedBlock, {
+	m.config = vim.tbl_deep_extend("force", m.config, opts)
+	vim.keymap.set("n", m.config.key, m.generate_doc_for_function, {
 		desc = "generate docstring",
 		silent = true,
 	})
