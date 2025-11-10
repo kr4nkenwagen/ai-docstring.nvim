@@ -3,13 +3,13 @@ local m = {}
 function m.get_function_range()
 	local ft = vim.bo.filetype
 	if ft == "lua" then
-		local h = require("ollama-doc.utils.lua-helper")
+		local h = require("ai-docstring.utils.lua-helper")
 		return h.get_lua_function_range()
 	elseif ft == "python" then
-		local h = require("ollama-doc.utils.python-helper")
+		local h = require("ai-docstring.utils.python-helper")
 		return h.get_python_function_range()
 	elseif ft == "c" or ft == "cpp" then
-		local h = require("ollama-doc.utils.c-helper")
+		local h = require("ai-docstring.utils.c-helper")
 		return h.get_c_function_range()
 	else
 		return nil, nil
@@ -37,8 +37,8 @@ function m.generate_doc_for_function()
 	end
 	vim.cmd("normal! ")
 	local func = m.get_function_text(start_line - 1, end_line)
-	local ollama = require("ollama-doc.utils.ollama-wrapper")
-	print(ollama.ask(table.concat(func, ""):gsub("\n", "#NL#")))
+	local ai = require("ai-docstring.utils.ai-wrapper")
+	print(ai.ask(table.concat(func, ""):gsub("\n", "#NL#")))
 	-- Optional: leave visual mode afterward
 end
 
@@ -49,7 +49,7 @@ function m.setup(opts)
 		desc = "generate docstring",
 		silent = true,
 	})
-	vim.keymap.set("n", "<leader>ot", require("ollama-doc.utils.python-helper").InsertIndentedBlock, {
+	vim.keymap.set("n", "<leader>ot", require("ai-docstring.utils.python-helper").InsertIndentedBlock, {
 		desc = "generate docstring",
 		silent = true,
 	})
