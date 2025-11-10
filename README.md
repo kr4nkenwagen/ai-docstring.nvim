@@ -21,7 +21,7 @@ require("ai-docstring").setup({
     key = "<leader>od",
     ai = {
         model = "mistral:7b",
-        system = "system prompt,
+        system = "system prompt",
         serve = true
     }
 })
