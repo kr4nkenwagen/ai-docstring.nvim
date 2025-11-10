@@ -7,6 +7,14 @@ This plugin will attempt to write a docstring for the function at the cursors po
 ## Prerequisites
 * [Ollama](https://github.com/ollama/ollama)
 * Mistrel:7b - _This can be chanded with opts.ai.model_
+
+## Supported languages
+* C
+* C++
+* LUA
+* Python
+  This list will be expanded.
+
 ## Installation
 ### Lazy
 ```
@@ -19,6 +27,8 @@ This plugin will attempt to write a docstring for the function at the cursors po
 ```
 require("ai-docstring").setup({
     key = "<leader>od",
+    accept_key = "<leader>",
+    decline_key = "q",
     ai = {
         model = "mistral:7b",
         system = "system prompt",
