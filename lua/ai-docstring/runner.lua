@@ -1,8 +1,12 @@
 local r = {}
 
-function r.run_async(cmd, buf, win)
-	r.buf = buf
-	r.win = win
+function r.run_async(cmd, win)
+	if cmd ~= nil then
+		r.buf = win.buf
+		r.cmd = cmd
+		r.win = win
+		r.win.cmd = cmd
+	end
 	r.id = vim.fn.jobstart(cmd, {
 		stdout_buffered = false,
 		stderr_buffered = true,
@@ -11,6 +15,10 @@ function r.run_async(cmd, buf, win)
 		on_stderr = r.on_stderr,
 		on_exit = r.on_exit,
 	})
+	print(r.id)
+	if win ~= nil then
+		r.win.runner = r.id
+	end
 end
 
 function r.on_stdout(_, data, _)
@@ -44,6 +52,8 @@ function r.on_stderr(_, data, _)
 		end)
 	end
 end
+
+function r.stop() end
 
 function r.on_exit(_, exit_code, _) end
 
