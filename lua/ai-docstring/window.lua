@@ -1,16 +1,16 @@
 local w = {}
 function w.create_output_window()
-	local config = require("ai-docstring").config
-	local buf = vim.api.nvim_create_buf(false, true) -- unlisted, scratch buffer
-	local current_buf = vim.api.nvim_get_current_buf() or 0
+	w.config = require("ai-docstring").config
+	w.buf = vim.api.nvim_create_buf(false, true) -- unlisted, scratch buffer
+	w.current_buf = vim.api.nvim_get_current_buf() or 0
 	local width = math.floor(vim.o.columns * 0.7)
 	local height = math.floor(vim.o.lines * 0.5)
 	local row = math.floor((vim.o.lines - height) / 2)
 	local col = math.floor((vim.o.columns - width) / 2)
 
-	vim.api.nvim_buf_create_user_command(buf, "YankAndPasteBuffer", function()
+	vim.api.nvim_buf_create_user_command(w.buf, "YankAndPasteBuffer", function()
 		-- Get all lines in buffer
-		local lines = vim.api.nvim_buf_get_lines(buf, 0, -1, false)
+		local lines = vim.api.nvim_buf_get_lines(w.buf, 0, -1, false)
 		for i = #lines, 1, -1 do
 			local line = lines[i]
 			if string.find(line, "```") or #line == 0 then
@@ -19,20 +19,25 @@ function w.create_output_window()
 		end
 		table.insert(lines, 1, "")
 		-- Close the buffer
-		vim.api.nvim_buf_delete(buf, { force = true })
+		vim.api.nvim_buf_delete(w.buf, { force = true })
 
 		-- Insert the yanked lines at cursor in current buffer
-		local win = vim.api.nvim_get_current_win()
-		local row, col = unpack(vim.api.nvim_win_get_cursor(win))
-		row = row - 1
-		vim.api.nvim_buf_set_text(0, row, col, row, col, lines)
+		w.win = vim.api.nvim_get_current_win()
+		w.row, w.col = unpack(vim.api.nvim_win_get_cursor(w.win))
+		w.row = w.row - 1
+		vim.api.nvim_buf_set_text(0, w.row, w.col, w.row, w.col, w.lines)
 	end, {})
 
-	vim.api.nvim_buf_set_keymap(buf, "n", "<leader>", ":YankAndPasteBuffer<CR>", { noremap = true, silent = true })
-	vim.api.nvim_buf_set_keymap(buf, "n", "q", ":q!<CR>", { noremap = true, silent = true })
-	vim.api.nvim_buf_set_keymap(buf, "n", "r", ":q!<CR>", { noremap = true, silent = true })
+	vim.api.nvim_buf_create_user_command(w.buf, "RequestsNewGeneration", function()
+		vim.fn.jobstop(w.runner)
+		w.clear_buffer()
+		require("ai-docstring.runner").run_async(w.cmd, w)
+	end, {})
+	vim.api.nvim_buf_set_keymap(w.buf, "n", "<leader>", ":YankAndPasteBuffer<CR>", { noremap = true, silent = true })
+	vim.api.nvim_buf_set_keymap(w.buf, "n", "q", ":q!<CR>", { noremap = true, silent = true })
+	vim.api.nvim_buf_set_keymap(w.buf, "n", "r", ":RequestsNewGeneration<CR>", { noremap = true, silent = true })
 
-	local win = vim.api.nvim_open_win(buf, true, {
+	w.win = vim.api.nvim_open_win(w.buf, true, {
 		relative = "editor",
 		width = width,
 		height = height,
@@ -40,11 +45,19 @@ function w.create_output_window()
 		col = col,
 		style = "minimal",
 		border = "rounded",
-		title = "al-docstring | " .. config.ai.model,
-		footer = config.accept_key .. ": Accept docstring | " .. config.decline_key .. ": Discard docstring",
+		title = "al-docstring | " .. w.config.ai.model,
+		footer = w.config.accept_key
+			.. ": Accept docstring | "
+			.. w.config.renew_key
+			.. ": Renew generation"
+			.. w.config.decline_key
+			.. ": Discard docstring",
 	})
+	return w
+end
 
-	return buf, win
+function w.clear_buffer()
+	vim.api.nvim_buf_set_lines(0, 0, -1, false, {})
 end
 
 function w.close_and_save(src, dest)
