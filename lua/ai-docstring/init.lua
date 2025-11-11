@@ -36,7 +36,7 @@ function m.generate_doc_for_function()
 	vim.cmd("normal! ")
 	local func = m.get_function_text(start_line - 1, end_line)
 	local ai = require("ai-docstring.utils.ai-wrapper")
-	ai.query(table.concat(func, ""))
+	ai.query(table.concat(func, ""), vim.bo.filetype)
 end
 
 function m.setup(opts)
@@ -46,6 +46,9 @@ function m.setup(opts)
 	vim.keymap.set("n", m.config.key, m.generate_doc_for_function, {
 		desc = "generate docstring",
 		silent = true,
+	})
+	vim.api.nvim_create_user_command("AiGenerateDocstring", m.generate_doc_for_function, {
+		bang = true,
 	})
 end
 

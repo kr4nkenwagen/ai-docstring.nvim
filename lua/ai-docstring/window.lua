@@ -27,8 +27,10 @@ function w.create_output_window()
 		row = row - 1
 		vim.api.nvim_buf_set_text(0, row, col, row, col, lines)
 	end, {})
+
 	vim.api.nvim_buf_set_keymap(buf, "n", "<leader>", ":YankAndPasteBuffer<CR>", { noremap = true, silent = true })
 	vim.api.nvim_buf_set_keymap(buf, "n", "q", ":q!<CR>", { noremap = true, silent = true })
+	vim.api.nvim_buf_set_keymap(buf, "n", "r", ":q!<CR>", { noremap = true, silent = true })
 
 	local win = vim.api.nvim_open_win(buf, true, {
 		relative = "editor",
