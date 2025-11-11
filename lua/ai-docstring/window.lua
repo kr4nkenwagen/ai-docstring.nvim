@@ -49,7 +49,7 @@ function w.create_output_window()
 		footer = w.config.accept_key
 			.. ": Accept docstring | "
 			.. w.config.renew_key
-			.. ": Renew generation"
+			.. ": Renew generation | "
 			.. w.config.decline_key
 			.. ": Discard docstring",
 	})
