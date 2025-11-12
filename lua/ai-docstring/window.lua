@@ -12,21 +12,13 @@ function w.create_output_window()
 	vim.api.nvim_buf_create_user_command(w.buf, "YankAndPasteBuffer", function()
 		-- Get all lines in buffer
 		local lines = vim.api.nvim_buf_get_lines(w.buf, 0, -1, false)
-		for i = #lines, 1, -1 do
-			local line = lines[i]
-			if string.find(line, "```") or #line == 0 then
-				table.remove(lines, i)
-			end
-		end
-		table.insert(lines, 1, "")
 		-- Close the buffer
 		vim.api.nvim_buf_delete(w.buf, { force = true })
 
-		-- Insert the yanked lines at cursor in current buffer
+		lines = require("ai-docstring.templates." .. vim.bo.filetype).post_process(lines)
 		local win = vim.api.nvim_get_current_win()
-		local row, col = unpack(vim.api.nvim_win_get_cursor(w.win))
-		row = row - 1
-		vim.api.nvim_buf_set_text(0, row, col, w.row, col, lines)
+		local row, col = unpack(vim.api.nvim_win_get_cursor(win))
+		vim.api.nvim_buf_set_text(0, row, col, row, col, lines)
 	end, {})
 
 	vim.api.nvim_buf_create_user_command(w.buf, "RequestsNewGeneration", function()

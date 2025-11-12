@@ -48,4 +48,13 @@ end
 
 t.declaration_offset = -1
 
+function t.post_process(docstring)
+	for i = #docstring, 1, -1 do
+		local line = docstring[i]
+		if string.find(line, "```") or #line == 0 then
+			table.remove(docstring, i)
+		end
+	end
+	return docstring
+end
 return t

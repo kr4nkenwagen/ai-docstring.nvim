@@ -87,4 +87,34 @@ function t.InsertIndentedBlock()
 	vim.api.nvim_buf_set_lines(bufnr, row, row, false, block)
 end
 
+function t.post_process(docstring)
+	for i = #docstring, 1, -1 do
+		if docstring[i] == "" then
+			table.remove(docstring, i)
+		end
+	end
+	local buf = vim.api.nvim_get_current_buf()
+	local row = vim.api.nvim_win_get_cursor(0)[1]
+	local line = vim.api.nvim_buf_get_lines(0, row + 1, row + 2, false)[1] or ""
+	local indent = line:match("^(%s*)") or ""
+	print(indent)
+	vim.api.nvim_buf_set_lines(buf, row, row, true, { "" })
+	vim.api.nvim_win_set_cursor(0, { row, 0 })
+	if docstring[1] ~= '"""' then
+		docstring[1] = docstring[1]:gsub('"', "")
+		table.insert(docstring, 1, '"""')
+	end
+	if docstring[#docstring] ~= '"""' then
+		docstring[#docstring] = docstring[#docstring]:gsub('"', "")
+		table.insert(docstring, #docstring + 1, '"""')
+	end
+	for i = #docstring, 1, -1 do
+		line = docstring[i]
+		docstring[i] = indent .. line
+		if string.find(line, "```") or #line == 0 then
+			table.remove(docstring, i)
+		end
+	end
+	return docstring
+end
 return t
