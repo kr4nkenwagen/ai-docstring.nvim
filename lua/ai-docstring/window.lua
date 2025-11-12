@@ -1,12 +1,13 @@
 local w = {}
 function w.create_output_window()
 	w.config = require("ai-docstring").config
-	w.buf = vim.api.nvim_create_buf(false, true) -- unlisted, scratch buffer
+	w.buf = vim.api.nvim_create_buf(false, true)
+	vim.api.nvim_set_option_value("modifiable", true, { buf = w.buf })
 	w.current_buf = vim.api.nvim_get_current_buf() or 0
-	local width = math.floor(vim.o.columns * 0.7)
-	local height = math.floor(vim.o.lines * 0.5)
-	local row = math.floor((vim.o.lines - height) / 2)
-	local col = math.floor((vim.o.columns - width) / 2)
+	w.width = math.floor(vim.o.columns * 0.7)
+	w.height = math.floor(vim.o.lines * 0.5)
+	w.row = math.floor((vim.o.lines - w.height) / 2)
+	w.col = math.floor((vim.o.columns - w.width) / 2)
 
 	vim.api.nvim_buf_create_user_command(w.buf, "YankAndPasteBuffer", function()
 		-- Get all lines in buffer
@@ -22,10 +23,10 @@ function w.create_output_window()
 		vim.api.nvim_buf_delete(w.buf, { force = true })
 
 		-- Insert the yanked lines at cursor in current buffer
-		w.win = vim.api.nvim_get_current_win()
-		w.row, w.col = unpack(vim.api.nvim_win_get_cursor(w.win))
-		w.row = w.row - 1
-		vim.api.nvim_buf_set_text(0, w.row, w.col, w.row, w.col, w.lines)
+		local win = vim.api.nvim_get_current_win()
+		local row, col = unpack(vim.api.nvim_win_get_cursor(w.win))
+		row = row - 1
+		vim.api.nvim_buf_set_text(0, row, col, w.row, col, lines)
 	end, {})
 
 	vim.api.nvim_buf_create_user_command(w.buf, "RequestsNewGeneration", function()
@@ -39,10 +40,10 @@ function w.create_output_window()
 
 	w.win = vim.api.nvim_open_win(w.buf, true, {
 		relative = "editor",
-		width = width,
-		height = height,
-		row = row,
-		col = col,
+		width = w.width,
+		height = w.height,
+		row = w.row,
+		col = w.col,
 		style = "minimal",
 		border = "rounded",
 		title = "al-docstring | " .. w.config.ai.model,

@@ -15,6 +15,7 @@ function r.run_async(cmd, win)
 		on_stderr = r.on_stderr,
 		on_exit = r.on_exit,
 	})
+	vim.fn.jobresize(r.id, r.win.width, r.win.height)
 	if win ~= nil then
 		r.win.runner = r.id
 	end
