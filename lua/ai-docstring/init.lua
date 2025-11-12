@@ -1,18 +1,10 @@
 local m = {}
 function m.get_function_range()
-	local ft = vim.bo.filetype
-	if ft == "lua" then
-		local h = require("ai-docstring.utils.lua-helper")
-		return h.get_lua_function_range()
-	elseif ft == "python" then
-		local h = require("ai-docstring.utils.python-helper")
-		return h.get_python_function_range()
-	elseif ft == "c" or ft == "cpp" then
-		local h = require("ai-docstring.utils.c-helper")
-		return h.get_c_function_range()
-	else
+	local helper = require("ai-docstring.templates." .. vim.bo.filetype)
+	if helper == nil then
 		return nil, nil
 	end
+	return helper.get_function()
 end
 
 function m.get_function_text(start_line, end_line)
