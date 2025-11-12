@@ -46,4 +46,6 @@ function t.get_function()
 	return start_line, line_count
 end
 
+t.declaration_offset = -1
+
 return t

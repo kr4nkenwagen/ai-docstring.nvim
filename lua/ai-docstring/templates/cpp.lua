@@ -42,4 +42,6 @@ function t.get_function()
 	return nil, nil
 end
 
+t.declaration_offset = -1
+
 return t
