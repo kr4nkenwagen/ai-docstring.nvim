@@ -1,5 +1,13 @@
-local h = {}
-function h.get_lua_function_range()
+local t = {}
+t.docstring = [[ 
+--- {{Brief description}}
+-- @tparam {{typed arg tupe}} {{typed arg name}} {{typed arg description}}
+-- @param {{arg tupe}} {{arg name}} {{arg description}}
+-- @treturn {{typed return type}} {{typed return description}}
+-- @return {{return description}}
+]]
+
+function t.get_function()
 	local start_pat = [[\v^\s*(local\s+)?function\s+\k*]]
 	local start_line = vim.fn.search(start_pat, "bnW")
 	if start_line == 0 then
@@ -38,4 +46,6 @@ function h.get_lua_function_range()
 	return start_line, line_count
 end
 
-return h
+t.declaration_offset = -1
+
+return t

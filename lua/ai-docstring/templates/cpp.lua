@@ -1,5 +1,16 @@
-local h = {}
-function h.get_c_function_range()
+local t = {}
+t.docstring = [[
+/**
+ * @brief {{Brief description}} 
+ *
+ * {{description}}
+ *
+ * @param {{arg1 name}} {{arg1 description}}
+ * @param {{arg2 name}} {{arg2 description}}
+ * @return {{return description}}
+ */]]
+
+function t.get_function()
 	local line_count = vim.fn.line("$")
 	local cursor_line = vim.fn.line(".")
 	local function_signature_pat = "%s*[%w_]+[%w_%s*&]*%s+[%w_]+%s*%([^;]*%)%s*{?"
@@ -30,4 +41,7 @@ function h.get_c_function_range()
 	end
 	return nil, nil
 end
-return h
+
+t.declaration_offset = -1
+
+return t

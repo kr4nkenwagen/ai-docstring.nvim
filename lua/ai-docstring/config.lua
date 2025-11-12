@@ -5,7 +5,7 @@ c.decline_key = "q"
 c.renew_key = "r"
 c.ai = {
 	model = "mistral:7b",
-	system = "You are a senior developer in $LANG tasked with writing a docstring for the following funcion. The docstring should use best practices. Only write the docstring. Nothing else. do not write code. ",
+	system = "Fill in the template with information from the $LANG function at the end. do not write code. Write only the template. with data. Nothing else: $TEMPLATE",
 	serve = true,
 }
 return c
