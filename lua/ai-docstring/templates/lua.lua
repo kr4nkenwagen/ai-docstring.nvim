@@ -8,47 +8,31 @@ t.docstring = [[
 ]]
 
 function t.get_function()
-	local start_pat = [[\v^\s*(local\s+)?function\s+\k*]]
-	local start_line = vim.fn.search(start_pat, "bnW")
-	if start_line == 0 then
-		print("No function start found")
+	local node = vim.treesitter.get_node({ pos = vim.api.nvim_win_get_cursor(0) })
+	while node do
+		if node:type():match("function_declaration") then
+			break
+		end
+		node = node:parent()
+	end
+	if node == nil then
 		return nil, nil
 	end
-
-	local line_count = vim.api.nvim_buf_line_count(0)
-	local level = 1 -- start at 1 for the function itself
-
-	for lnum = start_line + 1, line_count do
-		local line = vim.api.nvim_buf_get_lines(0, lnum - 1, lnum, false)[1]
-
-		-- Increment level for nested blocks
-		if
-			line:match("^%s*function[%s%(]")
-			or line:match("^%s*do%s*$")
-			or line:match("^%s*repeat%s*$")
-			or line:match("^%s*for .* do%s*$")
-			or line:match("^%s*while .* do%s*$")
-			or line:match("^%s*if .* then%s*$")
-		then
-			level = level + 1
-		end
-
-		-- Decrement level for closing blocks
-		if line:match("^%s*end%s*$") or line:match("^%s*until.*$") then
-			level = level - 1
-			if level == -1 then
-				return start_line, lnum
-			end
-		end
-	end
-
-	-- fallback if function never closes
+	local start_line, start_col, end_row, end_col = node:range()
+	local line_count = end_row - start_line
 	return start_line, line_count
 end
 
-t.declaration_offset = -1
-
 function t.post_process(docstring)
+	for i = #docstring, 1, -1 do
+		if docstring[i] == "" then
+			table.remove(docstring, i)
+		end
+	end
+	local buf = vim.api.nvim_get_current_buf()
+	local row = vim.api.nvim_win_get_cursor(0)[1]
+	vim.api.nvim_buf_set_lines(buf, row, row, true, { "" })
+	vim.api.nvim_win_set_cursor(0, { row, 0 })
 	for i = #docstring, 1, -1 do
 		local line = docstring[i]
 		if string.find(line, "```") or #line == 0 then

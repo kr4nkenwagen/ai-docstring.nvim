@@ -95,9 +95,8 @@ function t.post_process(docstring)
 	end
 	local buf = vim.api.nvim_get_current_buf()
 	local row = vim.api.nvim_win_get_cursor(0)[1]
-	local line = vim.api.nvim_buf_get_lines(0, row + 1, row + 2, false)[1] or ""
+	local line = vim.api.nvim_buf_get_lines(0, row, row + 1, false)[1] or ""
 	local indent = line:match("^(%s*)") or ""
-	print(indent)
 	vim.api.nvim_buf_set_lines(buf, row, row, true, { "" })
 	vim.api.nvim_win_set_cursor(0, { row, 0 })
 	if docstring[1] ~= '"""' then

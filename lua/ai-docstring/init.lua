@@ -1,5 +1,6 @@
 local m = {}
 function m.get_function_range()
+	print(vim.bo.filetype)
 	local helper = require("ai-docstring.templates." .. vim.bo.filetype)
 	if helper == nil then
 		return nil, nil
@@ -40,6 +41,9 @@ function m.setup(opts)
 		silent = true,
 	})
 	vim.api.nvim_create_user_command("AiGenerateDocstring", m.generate_doc_for_function, {
+		bang = true,
+	})
+	vim.api.nvim_create_user_command("Dwadw", require("ai-docstring.templates.python").get_function, {
 		bang = true,
 	})
 end

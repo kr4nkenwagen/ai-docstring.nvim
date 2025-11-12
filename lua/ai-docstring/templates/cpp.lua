@@ -51,6 +51,7 @@ function t.post_process(docstring)
 			table.remove(docstring, i)
 		end
 	end
+	table.insert(docstring, #docstring + 1, "")
 	return docstring
 end
 return t
