@@ -7,6 +7,7 @@ This plugin will attempt to write a docstring for the function at the cursors po
 ## Prerequisites
 * [Ollama](https://github.com/ollama/ollama)
 * Mistrel:7b - _This can be chanded with opts.ai.model_
+* [Nvim-treesitter](https://github.com/nvim-treesitter/nvim-treesitter)
 
 ## Supported languages
 * C
@@ -31,6 +32,7 @@ require("ai-docstring").setup({
     key = "<leader>od",
     accept_key = "<leader>",
     decline_key = "q",
+    renew_key = "r"
     ai = {
         model = "mistral:7b",
         system = "system prompt",
