@@ -6,6 +6,17 @@ This plugin i still in its infancy and lacks most of its features.
 
 This plugin will attempt to write a docstring for the function at the cursors position.
 
+## Usage
+Put your cursor inside a function and press `<Leader>od`. A scratch pad will appear. Ollama will pip output to it and you can edit it. Once you are happy with the docstring, press `<leader>` to apply it to your function.
+
+### Keybinds inside the scratch pad
+* `<Leader>` closes scratch pad and applies the generated docstring.
+* `r` Clears scratch pad and generates a new docstring.
+* `q` Discoards docstring and closes scratch pad.
+
+
+_These keybinds can be configured inside `opts`_
+
 ## Prerequisites
 * [Ollama](https://github.com/ollama/ollama)
 * Mistrel:7b - _This can be chanded with opts.ai.model_
