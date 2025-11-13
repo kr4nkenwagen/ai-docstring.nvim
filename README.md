@@ -82,8 +82,8 @@ opt.languages["lua"] = {
       return nil, nil
     end
     local start_line, start_col, end_row, end_col = node:range()
-    local line_count = end_row - start_line
-    return start_line, line_count
+    end_row = end_row + 1
+    return start_line, end_row
   end,
 
   post_process = function(docstring)
