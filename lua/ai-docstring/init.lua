@@ -19,7 +19,6 @@ function m.load_language_module()
 	local ok, module = pcall(require, "ai-docstring.templates." .. language)
 	print(ok)
 	if ok then
-		print("tetetete")
 		exp_module = module
 	end
 	if m.config.languages[language] ~= nil then
