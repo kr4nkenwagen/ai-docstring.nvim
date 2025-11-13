@@ -22,14 +22,14 @@ This plugin will attempt to write a docstring for the function at the cursors po
 
 ## Installation
 ### Lazy
-```
+``` lua
 {
     "kr4nkenwagen/ai-docstring.nvim"
 }
 ```
 
 ## Configuration
-```
+``` lua
 require("ai-docstring").setup({
     key = "<leader>od",
     accept_key = "<leader>",
@@ -60,7 +60,7 @@ To add more languages you can add them to opt.languages. You will require to add
 | post_process | a function that takes a string array and returns it. Here you can do formatting and set the cursor in the buffer where you want the docstring to be placed. |
 
 _example_
-```
+``` lua
 opt.languages["lua"] = {
   docstring = [[ 
   --- {{Brief description}}
