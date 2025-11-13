@@ -52,7 +52,7 @@ This will allow the user to set their own system prompt. use the following varia
 | $FUNC     | Adds function body to the prompt                                                |
 
 ### Adding custom languages
-To add more languages you can add them to opt.languages. You will require to add three fields to the object. The key in the languages table needs to be identical to `vim.bo.filetype`,
+To add more languages you can add them to opt.languages. You will require to add three fields to the object. The key in the languages table needs to be identical to output of `:lua print(vim.bo.filetype)`,
 | Name         | Definition                                                                                                                                                  |
 | ------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | docstring    | A template for how the docstring should be structured.                                                                                                      |
