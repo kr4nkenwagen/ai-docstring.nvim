@@ -1,3 +1,5 @@
+[![MIT License](https://img.shields.io/badge/License-MIT-green.svg)](https://jon-jennemann.mit-license.org)
+
 # ai-docstring.nvim
 A plugin for generating docstrings with ollama.
 This plugin i still in its infancy and lacks most of its features.
@@ -40,7 +42,10 @@ require("ai-docstring").setup({
     }
 })
 ```
+### opt.ai.system
+This will allow the user to set their own system prompt. use the following variables:
 
-## License
-
-[![MIT License](https://img.shields.io/badge/License-MIT-green.svg)](https://jon-jennemann.mit-license.org)
+| Name      | Definition                                                                      |
+| --------- | ------------------------------------------------------------------------------- |
+| $LANG     | Filetype.(python, c, cpp, lua)                                                  |
+| $TEMPLATE | This supplies a template to the LLM for how the docstring should be structured. |
