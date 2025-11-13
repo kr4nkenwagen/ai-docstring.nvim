@@ -1,18 +1,19 @@
 local w = {}
-function w.query(question, language, win)
+function w.query(funct, language, win)
 	if win == nil then
 		win = require("ai-docstring.window").create_output_window()
 	end
 	local config = require("ai-docstring").config
-	local system = config.ai.system
+	local query = config.ai.prompt
 	local docstring = require("ai-docstring.templates." .. language)
-	system = system:gsub("$LANG", language)
-	system = system:gsub("$TEMPLATE", docstring.docstring)
+	query = query:gsub("$LANG", language)
+	query = query:gsub("$TEMPLATE", docstring.docstring)
+	query = query:gsub("$FUNC", funct)
 	local cmd = {
 		"ollama",
 		"run",
 		config.ai.model,
-		'"' .. system .. " " .. question .. '"',
+		'"' .. query .. '"',
 	}
 	local runner = require("ai-docstring.runner")
 	runner.run_async(cmd, win)
