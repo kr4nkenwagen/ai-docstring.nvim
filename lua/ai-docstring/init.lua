@@ -1,6 +1,5 @@
 local m = {}
 function m.get_function_range()
-	print(vim.bo.filetype)
 	local helper = require("ai-docstring.templates." .. vim.bo.filetype)
 	if helper == nil then
 		return nil, nil
@@ -11,6 +10,20 @@ end
 function m.get_function_text(start_line, end_line)
 	local lines = vim.api.nvim_buf_get_lines(0, start_line, end_line, false)
 	return lines
+end
+
+function m.load_language_module()
+	local config = require("ai-docstring").config
+	local language = vim.bo.filetype
+	local exp_module = {}
+	local ok, module = pcall(require, "ai-docstring." .. language)
+	if ok then
+		exp_module = module
+	end
+	if config.language[language] ~= nil then
+		exp_module = vim.tbl_deep_extend("force", module, config.language[language])
+	end
+	return exp_module
 end
 
 function m.generate_doc_for_function()
@@ -41,9 +54,6 @@ function m.setup(opts)
 		silent = true,
 	})
 	vim.api.nvim_create_user_command("AiGenerateDocstring", m.generate_doc_for_function, {
-		bang = true,
-	})
-	vim.api.nvim_create_user_command("Dwadw", require("ai-docstring.templates.python").get_function, {
 		bang = true,
 	})
 end
