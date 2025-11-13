@@ -42,8 +42,6 @@ function t.get_function()
 	return nil, nil
 end
 
-t.declaration_offset = -1
-
 function t.post_process(docstring)
 	for i = #docstring, 1, -1 do
 		local line = docstring[i]

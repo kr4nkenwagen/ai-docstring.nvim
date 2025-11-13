@@ -18,9 +18,9 @@ function t.get_function()
 	if node == nil then
 		return nil, nil
 	end
-	local start_line, start_col, end_row, end_col = node:range()
-	local line_count = end_row - start_line
-	return start_line, line_count
+	local start_line, _, end_row, _ = node:range()
+	end_row = end_row + 1
+	return start_line, end_row
 end
 
 function t.post_process(docstring)

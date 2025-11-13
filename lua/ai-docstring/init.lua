@@ -15,9 +15,7 @@ end
 function m.load_language_module()
 	local language = vim.bo.filetype
 	local exp_module = {}
-	print(language)
 	local ok, module = pcall(require, "ai-docstring.templates." .. language)
-	print(ok)
 	if ok then
 		exp_module = module
 	end
