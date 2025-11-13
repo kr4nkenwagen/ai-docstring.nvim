@@ -1,6 +1,6 @@
 local m = {}
 function m.get_function_range()
-	local helper = require("ai-docstring.templates." .. vim.bo.filetype)
+	local helper = m.load_language_module()
 	if helper == nil then
 		return nil, nil
 	end
@@ -13,15 +13,17 @@ function m.get_function_text(start_line, end_line)
 end
 
 function m.load_language_module()
-	local config = require("ai-docstring").config
 	local language = vim.bo.filetype
 	local exp_module = {}
-	local ok, module = pcall(require, "ai-docstring." .. language)
+	print(language)
+	local ok, module = pcall(require, "ai-docstring.templates." .. language)
+	print(ok)
 	if ok then
+		print("tetetete")
 		exp_module = module
 	end
-	if config.language[language] ~= nil then
-		exp_module = vim.tbl_deep_extend("force", module, config.language[language])
+	if m.config.languages[language] ~= nil then
+		exp_module = vim.tbl_deep_extend("force", module, m.config.languages[language])
 	end
 	return exp_module
 end
