@@ -37,15 +37,16 @@ require("ai-docstring").setup({
     renew_key = "r"
     ai = {
         model = "mistral:7b",
-        system = "system prompt",
+        prompt = "system prompt",
         serve = true
     }
 })
 ```
-### opt.ai.system
+### opt.ai.prompt
 This will allow the user to set their own system prompt. use the following variables:
 
 | Name      | Definition                                                                      |
 | --------- | ------------------------------------------------------------------------------- |
 | $LANG     | Filetype.(python, c, cpp, lua)                                                  |
 | $TEMPLATE | This supplies a template to the LLM for how the docstring should be structured. |
+| $FUNC     | Adds function body to the prompt                                                |
