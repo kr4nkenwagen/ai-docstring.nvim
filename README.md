@@ -54,7 +54,7 @@ require("ai-docstring").setup({
 })
 ```
 ### opt.ai.prompt
-This will allow the user to set their own system prompt. use the following variables:
+This will allow the user to set their own system prompt. Use the following variables:
 
 | Name      | Definition                                                                      |
 | --------- | ------------------------------------------------------------------------------- |
@@ -63,12 +63,13 @@ This will allow the user to set their own system prompt. use the following varia
 | $FUNC     | Adds function body to the prompt                                                |
 
 ### Adding custom languages
-To add more languages you can add them to opt.languages. You will require to add three fields to the object. The key in the languages table needs to be identical to output of `:lua print(vim.bo.filetype)`,
+To add more languages you can add them to opt.languages. The key in the languages table needs to be identical to output of `:lua print(vim.bo.filetype)`. The following members are required.
 | Name         | Definition                                                                                                                                                  |
 | ------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | docstring    | A template for how the docstring should be structured.                                                                                                      |
-| get_function | A function that returns start_line and end_line of the function.                                                                                            |
-| post_process | a function that takes a string array and returns it. Here you can do formatting and set the cursor in the buffer where you want the docstring to be placed. |
+| get_function | Function that returns start_line and end_line of the function.                                                                                              |
+| post_process | Function that takes a string array and returns it. This runs after AI generation. You can format or cleanup the text here.                                  |
+| set_cursor   | In this function you set where the docstring will be inserted. If this function is empty the docstring will be placed above function declaration.           |
 
 _example_
 ``` lua

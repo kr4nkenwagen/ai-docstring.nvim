@@ -42,6 +42,8 @@ function t.get_function()
 	return nil, nil
 end
 
+function t.place_cursor() end
+
 function t.post_process(docstring)
 	for i = #docstring, 1, -1 do
 		local line = docstring[i]

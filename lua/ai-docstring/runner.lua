@@ -53,9 +53,18 @@ function r.on_stderr(_, data, _)
 	end
 end
 
-function r.stop() end
+function r.stop()
+	vim.fn.jobstop(r.id)
+end
 
-function r.on_exit(_, exit_code, _) end
+function r.on_exit(_, exit_code, _)
+	local lines = r.win.get_buffer_text()
+	lines = require("ai-docstring.utils.ai-wrapper").clear_ai_chat(lines)
+	if r.win.action == r.win.actions.DOCSTRING then
+		lines = require("ai-docstring").load_language_module().post_process(lines)
+	end
+	r.win.set_buffer_text(lines)
+end
 
 function r.strip_ansi_colors(data)
 	local function clean_line(str)
