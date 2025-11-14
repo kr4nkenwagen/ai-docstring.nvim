@@ -54,18 +54,22 @@ function t.get_function()
 	return start_line, end_line
 end
 
+function t.place_cursor()
+	local buf = vim.api.nvim_get_current_buf()
+	local row = vim.api.nvim_win_get_cursor(0)[1]
+	vim.api.nvim_buf_set_lines(buf, row, row, true, { "" })
+	vim.api.nvim_win_set_cursor(0, { row, 0 })
+end
+
 function t.post_process(docstring)
 	for i = #docstring, 1, -1 do
 		if docstring[i] == "" then
 			table.remove(docstring, i)
 		end
 	end
-	local buf = vim.api.nvim_get_current_buf()
 	local row = vim.api.nvim_win_get_cursor(0)[1]
 	local line = vim.api.nvim_buf_get_lines(0, row, row + 1, false)[1] or ""
 	local indent = line:match("^(%s*)") or ""
-	vim.api.nvim_buf_set_lines(buf, row, row, true, { "" })
-	vim.api.nvim_win_set_cursor(0, { row, 0 })
 	if docstring[1] ~= '"""' then
 		docstring[1] = docstring[1]:gsub('"', "")
 		table.insert(docstring, 1, '"""')
