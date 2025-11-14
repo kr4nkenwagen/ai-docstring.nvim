@@ -53,7 +53,7 @@ require("ai-docstring").setup({
     }
 })
 ```
-### opt.ai.
+### opt.ai.prompt
 This will allow the user to set their own system prompt. use the following variables:
 
 | Name      | Definition                                                                      |
