@@ -1,16 +1,4 @@
 local m = {}
-function m.get_function_range()
-	local helper = m.load_language_module()
-	if helper == nil then
-		return nil, nil
-	end
-	return helper.get_function()
-end
-
-function m.get_function_text(start_line, end_line)
-	local lines = vim.api.nvim_buf_get_lines(0, start_line, end_line, false)
-	return lines
-end
 
 function m.load_language_module()
 	local language = vim.bo.filetype
@@ -26,7 +14,8 @@ function m.load_language_module()
 end
 
 function m.generate_doc_for_function()
-	local start_line, end_line = m.get_function_range()
+	local functions = require("ai-docstring.utils.functions")
+	local start_line, end_line = functions.get_function_range()
 	if not start_line then
 		vim.notify("No function found under cursor")
 		return
@@ -35,14 +24,15 @@ function m.generate_doc_for_function()
 	vim.cmd("normal! ")
 	vim.cmd("normal! " .. start_line - 1 .. "G")
 	vim.cmd("normal! ")
-	local func = m.get_function_text(start_line - 1, end_line)
+	local func = functions.get_function_text(start_line - 1, end_line)
 	local ai = require("ai-docstring.utils.ai-wrapper")
 	ai.query_docstring(table.concat(func, ""), vim.bo.filetype)
 end
 
 function m.generate_debug_lines()
-	local start_line, end_line = m.get_function_range()
-	local func = m.get_function_text(start_line - 1, end_line)
+	local functions = require("lua.ai-docstring.utils.functions")
+	local start_line, end_line = functions.get_function_range()
+	local func = functions.get_function_text(start_line - 1, end_line)
 	local ai = require("ai-docstring.utils.ai-wrapper")
 	ai.query_debug_lines(table.concat(func, ""), vim.bo.filetype)
 end

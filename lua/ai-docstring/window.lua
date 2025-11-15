@@ -69,15 +69,13 @@ function w.save_docstring(text, dest)
 end
 
 function w.save_debug_line(text, dest)
-	local treesitter = require("ai-docstring.utils.treesitter-wrapper")
-	local start_line, end_line = treesitter.get_function()
-	local indentation = treesitter.get_indentation_level()
+	local functions = require("ai-docstring.utils.functions")
+	local start_line, end_line = functions.get_function()
+	local indentation = functions.get_indentation_level()
 	if start_line == nil then
 		return
 	end
-	for i = 1, #text, 1 do
-		text[i] = string.rep(" ", indentation) .. text[i]
-	end
+	text = require("ai-docstring.utils.chars").indent_text(text, indentation)
 	vim.api.nvim_buf_set_text(0, start_line, 0, end_line, 0, text)
 end
 
