@@ -58,6 +58,9 @@ function r.stop()
 end
 
 function r.on_exit(_, exit_code, _)
+	if r.win.action == r.win.actions.FUNCTION_EXPLAINATION then
+		return
+	end
 	local lines = r.win.get_buffer_text()
 	lines = require("ai-docstring.utils.ai-wrapper").clear_ai_chat(lines)
 	if r.win.action == r.win.actions.DOCSTRING then

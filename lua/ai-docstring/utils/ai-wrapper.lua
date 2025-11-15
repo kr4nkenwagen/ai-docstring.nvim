@@ -49,7 +49,7 @@ function w.query_function_explaination(funct, language, win)
 	if win == nil then
 		local window_builder = require("ai-docstring.window")
 		win = window_builder.create_output_window(window_builder.actions.FUNCTION_EXPLAINATION)
-		win.set_language(language)
+		win.set_language("markdown")
 	end
 	local config = require("ai-docstring").config
 	local query = "This is a $LANG function. explain its input, output and logic. \n $FUNC"

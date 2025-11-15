@@ -57,11 +57,18 @@ function m.setup(opts)
 		desc = "Generate debug lines",
 		silent = true,
 	})
+	vim.keymap.set("n", "<leader>og", m.generate_function_explaination, {
+		desc = "Generate docstring",
+		silent = true,
+	})
 
 	vim.api.nvim_create_user_command("AiGenerateDocstring", m.generate_doc_for_function, {
 		bang = true,
 	})
 	vim.api.nvim_create_user_command("AiGenerateDebugLines", m.generate_debug_lines, {
+		bang = true,
+	})
+	vim.api.nvim_create_user_command("AiGenerateFunctionExplaination", m.generate_function_explaination, {
 		bang = true,
 	})
 end
