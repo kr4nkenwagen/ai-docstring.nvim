@@ -3,6 +3,7 @@ local w = {}
 w.actions = {
 	DOCSTRING = 1,
 	DEBUG_LINES = 2,
+	FUNCTION_EXPLAINATION = 3,
 }
 
 function w.create_output_window(action)

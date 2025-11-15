@@ -37,6 +37,14 @@ function m.generate_debug_lines()
 	ai.query_debug_lines(table.concat(func, ""), vim.bo.filetype)
 end
 
+function m.generate_function_explaination()
+	local functions = require("lua.ai-docstring.utils.functions")
+	local start_line, end_line = functions.get_function_range()
+	local func = functions.get_function_text(start_line - 1, end_line)
+	local ai = require("ai-docstring.utils.ai-wrapper")
+	ai.query_function_explaination(table.concat(func, ""), vim.bo.filetype)
+end
+
 function m.setup(opts)
 	m.config = require("ai-docstring.config")
 	opts = opts or {}
