@@ -33,4 +33,17 @@ function t.get_indentation_level()
 	return #indent
 end
 
+function t.get_function_text(start_line, end_line)
+	local lines = vim.api.nvim_buf_get_lines(0, start_line, end_line, false)
+	return lines
+end
+
+function t.get_function_range()
+	local helper = require("ai-docstring").load_language_module()
+	if helper == nil then
+		return nil, nil
+	end
+	return helper.get_function()
+end
+
 return t

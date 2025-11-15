@@ -8,19 +8,7 @@ t.docstring = [[
 ]]
 
 function t.get_function()
-	local node = vim.treesitter.get_node({ pos = vim.api.nvim_win_get_cursor(0) })
-	while node do
-		if node:type():match("function_declaration") then
-			break
-		end
-		node = node:parent()
-	end
-	if node == nil then
-		return nil, nil
-	end
-	local start_line, _, end_row, _ = node:range()
-	end_row = end_row + 1
-	return start_line, end_row
+	return require("ai-docstring.utils.functions").get_function()
 end
 
 function t.place_cursor()
