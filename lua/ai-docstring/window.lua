@@ -75,9 +75,7 @@ function w.save_debug_line(text, dest)
 	if start_line == nil then
 		return
 	end
-	for i = 1, #text, 1 do
-		text[i] = string.rep(" ", indentation) .. text[i]
-	end
+	text = require("ai-docstring.utils.chars").indent_text(text, indentation)
 	vim.api.nvim_buf_set_text(0, start_line, 0, end_line, 0, text)
 end
 

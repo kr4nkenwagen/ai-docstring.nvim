@@ -28,4 +28,11 @@ function c.containsBraille(input)
 	return input:match(braille_pattern)
 end
 
+function c.indent_text(text, indentation)
+	for i = 1, #text, 1 do
+		text[i] = string.rep(" ", indentation) .. text[i]
+	end
+	return text
+end
+
 return c
