@@ -24,10 +24,36 @@ function w.create_output_window(action)
 		w.clear_buffer()
 		require("ai-docstring.runner").run_async(w.cmd, w)
 	end, {})
-	vim.api.nvim_buf_set_keymap(w.buf, "n", "<leader>", ":YankAndPasteBuffer<CR>", { noremap = true, silent = true })
+	if w.action ~= w.actions.FUNCTION_EXPLAINATION then
+		vim.api.nvim_buf_set_keymap(
+			w.buf,
+			"n",
+			"<leader>",
+			":YankAndPasteBuffer<CR>",
+			{ noremap = true, silent = true }
+		)
+	end
 	vim.api.nvim_buf_set_keymap(w.buf, "n", "q", ":q!<CR>", { noremap = true, silent = true })
 	vim.api.nvim_buf_set_keymap(w.buf, "n", "r", ":RequestsNewGeneration<CR>", { noremap = true, silent = true })
 
+	local footer = ""
+	if w.action == w.actions.DOCSTRING then
+		footer = w.config.accept_key
+			.. ": Accept docstring | "
+			.. w.config.renew_key
+			.. ": Renew generation | "
+			.. w.config.decline_key
+			.. ": Quit window"
+	elseif w.action == w.actions.DEBUG_LINES then
+		footer = w.config.accept_key
+			.. ": Accept print lines | "
+			.. w.config.renew_key
+			.. ": Renew generation | "
+			.. w.config.decline_key
+			.. ": Quit window"
+	elseif w.action == w.actions.FUNCTION_EXPLAINATION then
+		footer = w.config.renew_key .. ": Renew generation | " .. w.config.decline_key .. ": Quit window"
+	end
 	w.win = vim.api.nvim_open_win(w.buf, true, {
 		relative = "editor",
 		width = w.width,
@@ -36,13 +62,8 @@ function w.create_output_window(action)
 		col = w.col,
 		style = "minimal",
 		border = "rounded",
-		title = "al-docstring | " .. w.config.ai.model,
-		footer = w.config.accept_key
-			.. ": Accept docstring | "
-			.. w.config.renew_key
-			.. ": Renew generation | "
-			.. w.config.decline_key
-			.. ": Discard docstring",
+		title = "ai-docstring | " .. w.config.ai.model,
+		footer = footer,
 	})
 	return w
 end
