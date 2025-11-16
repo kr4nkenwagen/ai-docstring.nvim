@@ -10,6 +10,10 @@ t.docstring = [[
  * @return {{return description}}
  */]]
 
+function t.indentation()
+	return 0
+end
+
 function t.get_function()
 	return require("ai-docstring.utils.functions").get_function()
 end

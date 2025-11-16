@@ -11,6 +11,10 @@ function t.get_function()
 	return require("ai-docstring.utils.functions").get_function()
 end
 
+function t.indentation()
+	return 0
+end
+
 function t.place_cursor()
 	local buf = vim.api.nvim_get_current_buf()
 	local row = vim.api.nvim_win_get_cursor(0)[1]

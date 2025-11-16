@@ -16,7 +16,7 @@ end
 function m.generate_doc_for_function()
 	local functions = require("ai-docstring.utils.functions")
 	local start_line, end_line = functions.get_function_range()
-	if not start_line then
+	if start_line == nil or end_line == nil then
 		vim.notify("No function found under cursor")
 		return
 	end
@@ -30,16 +30,24 @@ function m.generate_doc_for_function()
 end
 
 function m.generate_debug_lines()
-	local functions = require("lua.ai-docstring.utils.functions")
+	local functions = require("ai-docstring.utils.functions")
 	local start_line, end_line = functions.get_function_range()
+	if start_line == nil or end_line == nil then
+		vim.notify("No function found under cursor.")
+		return
+	end
 	local func = functions.get_function_text(start_line - 1, end_line)
 	local ai = require("ai-docstring.utils.ai-wrapper")
 	ai.query_debug_lines(table.concat(func, ""), vim.bo.filetype)
 end
 
 function m.generate_function_explaination()
-	local functions = require("lua.ai-docstring.utils.functions")
+	local functions = require("ai-docstring.utils.functions")
 	local start_line, end_line = functions.get_function_range()
+	if start_line == nil or end_line == nil then
+		vim.notify("No function found under cursor.")
+		return
+	end
 	local func = functions.get_function_text(start_line - 1, end_line)
 	local ai = require("ai-docstring.utils.ai-wrapper")
 	ai.query_function_explaination(table.concat(func, ""), vim.bo.filetype)
