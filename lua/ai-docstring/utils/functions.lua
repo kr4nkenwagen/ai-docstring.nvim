@@ -13,20 +13,15 @@ function t.get_function()
 		return nil, nil
 	end
 	local start_line, _, end_line, _ = node:range()
-	print(start_line)
-	print(end_line)
 	return start_line + 1, end_line + 1
 end
 
 function t.get_indentation_level()
 	local start_row, _ = t.get_function()
-	local line = vim.api.nvim_buf_get_lines(0, start_row, start_row + 1, false)[1]
-	if not line then
-		return 0
-	end
-	-- count leading whitespaces
-	local indent = line:match("^%s*")
-	return #indent
+	local indent_spaces = vim.fn.indent(start_row + 1)
+	local sw = vim.api.nvim_get_option_value("shiftwidth", {})
+	local indent_levels = sw > 0 and (indent_spaces / sw) or 0
+	return indent_spaces, indent_levels
 end
 
 function t.get_function_text(start_line, end_line)

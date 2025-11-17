@@ -86,7 +86,7 @@ end
 
 function w.save_docstring(text, dest)
 	require("ai-docstring").load_language_module().place_cursor()
-	local indentation = require("ai-docstring").load_language_module().indentation()
+	local indentation, _ = require("ai-docstring").load_language_module().indentation()
 	text = require("ai-docstring.utils.chars").indent_text(text, indentation)
 	local row, col = unpack(vim.api.nvim_win_get_cursor(0))
 	vim.api.nvim_buf_set_text(dest, row, col, row, col, text)
@@ -95,7 +95,7 @@ end
 function w.save_debug_line(text, dest)
 	local functions = require("ai-docstring.utils.functions")
 	local start_line, end_line = functions.get_function()
-	local indentation = functions.get_indentation_level()
+	local _, indentation = functions.get_indentation_level()
 	if start_line == nil or end_line == nil then
 		return
 	end
