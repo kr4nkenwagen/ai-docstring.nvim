@@ -19,18 +19,30 @@ _These keybinds can be configured inside `opts`_
 
 ## Prerequisites
 * [Ollama](https://github.com/ollama/ollama)
-* Mistrel:7b - _This can be chanded with opts.ai.model_
+* Mistrel:7b - _This can be changed with opts.ai.model_
 * [Nvim-treesitter](https://github.com/nvim-treesitter/nvim-treesitter)
 
 ## Natively supported languages
 * C
 * C++
-* LUA
-* Python
+* C#
+* Elixir
 * Go
+* Haskell
+* Java
+* Javascript
+* Julia
+* Kotlin
+* Lua
+* Perl
+* PHP
+* Python
+* Ruby
+* Rust
+* Swift
+* Typescript
 
-
-  This list will be expanded.
+This list will be expanded.
 
 ## Installation
 ### Lazy
