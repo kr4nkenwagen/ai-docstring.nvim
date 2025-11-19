@@ -52,7 +52,7 @@ function w.query_function_explaination(funct, language, win)
 		win.set_language("markdown")
 	end
 	local config = require("ai-docstring").config
-	local query = "This is a $LANG function. explain its input, output and logic. \n $FUNC"
+	local query = "This is a $LANG function. explain its input, output and logic. Use markdown. \n $FUNC"
 	local docstring = require("ai-docstring.templates." .. language)
 	query = query:gsub("$LANG", language)
 	query = query:gsub("$TEMPLATE", docstring.docstring)
