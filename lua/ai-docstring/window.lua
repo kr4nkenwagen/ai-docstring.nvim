@@ -101,7 +101,7 @@ function w.save_debug_line(text, dest)
 	end
 	text = require("ai-docstring.utils.chars").indent_text(text, indentation)
 	local end_col = #vim.api.nvim_buf_get_lines(dest, end_line, end_line + 1, false)[1]
-	vim.api.nvim_buf_set_text(dest, start_line, 0, end_line, end_col, text)
+	vim.api.nvim_buf_set_text(dest, start_line - 1, 0, end_line, end_col, text)
 end
 
 function w.close_and_save()
