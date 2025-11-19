@@ -13,8 +13,8 @@ t.docstring = [[ """{{Brief description}}
     """]]
 
 function t.indentation()
-	local _, indentation = require("ai-docstring.utils.functions").get_indentation_level()
-	indentation = indentation + 1
+	local indentation, _ = require("ai-docstring.utils.functions").get_indentation_level()
+	indentation = indentation + (vim.o.tabstop * 2)
 	return indentation
 end
 
@@ -69,7 +69,7 @@ end
 
 function t.post_process(docstring)
 	for i = #docstring, 1, -1 do
-		if docstring[i] == "" then
+		if docstring[i]:match("^%s*$") then
 			table.remove(docstring, i)
 		end
 	end

@@ -35,4 +35,15 @@ function c.indent_text(text, indentation)
 	return text
 end
 
+function c.trim_trail(text)
+	for i = #text, 1, -1 do
+		if text[i]:match("^%s*$") then
+			table.remove(text, i)
+		else
+			break
+		end
+	end
+	return text
+end
+
 return c
