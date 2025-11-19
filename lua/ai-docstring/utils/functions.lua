@@ -4,12 +4,7 @@ function t.get_function()
 	local node = vim.treesitter.get_node({ pos = vim.api.nvim_win_get_cursor(0) })
 	while node do
 		local type = node:type()
-		if
-			type == "function_definition"
-			or type == "function_declaration"
-			or type == "method_definition"
-			or type:match("function")
-		then
+		if type == "function_definition" or type == "function_declaration" or type == "method_definition" then
 			break
 		end
 		node = node:parent()
@@ -17,20 +12,16 @@ function t.get_function()
 	if node == nil then
 		return nil, nil
 	end
-	local start_line, _, end_row, _ = node:range()
-	return start_line, end_row
+	local start_line, _, end_line, _ = node:range()
+	return start_line + 1, end_line + 1
 end
 
 function t.get_indentation_level()
 	local start_row, _ = t.get_function()
-	local line = vim.api.nvim_buf_get_lines(0, start_row, start_row + 1, false)[1]
-	if not line then
-		return 0
-	end
-
-	-- count leading whitespace
-	local indent = line:match("^%s*")
-	return #indent
+	local indent_spaces = vim.fn.indent(start_row + 1)
+	local sw = vim.api.nvim_get_option_value("shiftwidth", {})
+	local indent_levels = sw > 0 and (indent_spaces / sw) or 0
+	return indent_spaces, indent_levels
 end
 
 function t.get_function_text(start_line, end_line)

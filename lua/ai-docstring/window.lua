@@ -85,20 +85,23 @@ function w.set_buffer_text(lines)
 end
 
 function w.save_docstring(text, dest)
-	local row, col = unpack(vim.api.nvim_win_get_cursor(0))
-	row = row - 1
-	vim.api.nvim_buf_set_text(dest, row, col, row, col, text)
+	require("ai-docstring").load_language_module().place_cursor()
+	local indentation = require("ai-docstring").load_language_module().indentation()
+	text = require("ai-docstring.utils.chars").indent_text(text, indentation)
+	local row, _ = unpack(vim.api.nvim_win_get_cursor(0))
+	vim.api.nvim_buf_set_text(dest, row, -1, row, -1, text)
 end
 
 function w.save_debug_line(text, dest)
 	local functions = require("ai-docstring.utils.functions")
 	local start_line, end_line = functions.get_function()
-	local indentation = functions.get_indentation_level()
-	if start_line == nil then
+	local _, indentation = functions.get_indentation_level()
+	if start_line == nil or end_line == nil then
 		return
 	end
 	text = require("ai-docstring.utils.chars").indent_text(text, indentation)
-	vim.api.nvim_buf_set_text(0, start_line, 0, end_line, 0, text)
+	local end_col = #vim.api.nvim_buf_get_lines(dest, end_line, end_line + 1, false)[1]
+	vim.api.nvim_buf_set_text(dest, start_line - 1, 0, end_line, end_col, text)
 end
 
 function w.close_and_save()
@@ -108,6 +111,7 @@ function w.close_and_save()
 	local src = w.buf
 	local dest = w.buf_parent
 	local text = w.get_buffer_text()
+	text = require("ai-docstring.utils.chars").trim_trail(text)
 	vim.api.nvim_buf_delete(src, { force = true })
 	if w.action == w.actions.DOCSTRING then
 		w.save_docstring(text, dest)

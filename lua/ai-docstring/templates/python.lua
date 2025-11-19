@@ -12,6 +12,12 @@ t.docstring = [[ """{{Brief description}}
         {{TypeError}}: {{Error description}}
     """]]
 
+function t.indentation()
+	local indentation, _ = require("ai-docstring.utils.functions").get_indentation_level()
+	indentation = indentation + (vim.o.tabstop * 2)
+	return indentation
+end
+
 function t.get_function()
 	local start_pat = "\\v^\\s*def\\s+\\k+"
 	local start_line = vim.fn.search(start_pat, "bnW")
@@ -56,14 +62,14 @@ end
 
 function t.place_cursor()
 	local buf = vim.api.nvim_get_current_buf()
-	local row = vim.api.nvim_win_get_cursor(0)[1]
+	local row = vim.api.nvim_win_get_cursor(0)[1] + 1
 	vim.api.nvim_buf_set_lines(buf, row, row, true, { "" })
 	vim.api.nvim_win_set_cursor(0, { row, 0 })
 end
 
 function t.post_process(docstring)
 	for i = #docstring, 1, -1 do
-		if docstring[i] == "" then
+		if docstring[i]:match("^%s*$") then
 			table.remove(docstring, i)
 		end
 	end
