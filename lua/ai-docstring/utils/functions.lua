@@ -1,10 +1,35 @@
 local t = {}
+t.function_types = {
+	"function_declaration",
+	"method_declaration",
+	"function_declaration",
+	"function_definition",
+	"function",
+	"function_declaration",
+	"method_definition",
+	"arrow_function",
+	"generator_function",
+	"generator_function_declaration",
+	"function_definition",
+	"function_item",
+	"method_definition",
+	"function_definition",
+	"function_declarator",
+	"function_definition",
+}
 
 function t.get_function()
 	local node = vim.treesitter.get_node({ pos = vim.api.nvim_win_get_cursor(0) })
 	while node do
 		local type = node:type()
-		if type == "function_definition" or type == "function_declaration" or type == "method_definition" then
+		local found_function = false
+		for _, v in ipairs(t.function_types) do
+			if v == type then
+				found_function = true
+				break
+			end
+		end
+		if found_function then
 			break
 		end
 		node = node:parent()
