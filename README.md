@@ -27,6 +27,7 @@ _These keybinds can be configured inside `opts`_
 * C++
 * LUA
 * Python
+* Go
 
 
   This list will be expanded.
