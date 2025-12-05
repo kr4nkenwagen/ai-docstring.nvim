@@ -55,7 +55,7 @@ This list will be expanded.
 ## Configuration
 ``` lua
 require("ai-docstring").setup({
-    key = "<leader>od",
+    key = "<leader>o",
     accept_key = "<leader>",
     decline_key = "q",
     renew_key = "r"

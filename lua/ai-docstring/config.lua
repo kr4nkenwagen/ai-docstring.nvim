@@ -1,5 +1,5 @@
 local c = {}
-c.key = "<leader>od"
+c.key = "<leader>o"
 c.accept_key = "<leader>"
 c.decline_key = "q"
 c.renew_key = "r"
