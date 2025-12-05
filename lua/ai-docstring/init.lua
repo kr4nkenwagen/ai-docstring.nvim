@@ -57,17 +57,16 @@ function m.setup(opts)
 	m.config = require("ai-docstring.config")
 	opts = opts or {}
 	m.config = vim.tbl_deep_extend("force", m.config, opts)
-	vim.keymap.set("n", m.config.key, m.generate_doc_for_function, {
-		desc = "Generate docstring",
-		silent = true,
-	})
-	vim.keymap.set("n", "<leader>of", m.generate_debug_lines, {
-		desc = "Generate debug lines",
-		silent = true,
-	})
-	vim.keymap.set("n", "<leader>og", m.generate_function_explaination, {
-		desc = "Generate docstring",
-		silent = true,
+	local wk = require("which-key")
+	wk.add({
+		{
+			m.config.key,
+			group = "Ollama functions generation",
+			mode = { "n", "v" }, -- optional; add if needed
+		},
+		{ m.config.key .. "d", "<cmd>AiGenerateDocstring<CR>", desc = "Function documentation" },
+		{ m.config.key .. "f", "<cmd>AiGenerateDebugLines<CR>", desc = "Function print debug lines" },
+		{ m.config.key .. "g", "<cmd>AiGenerateFunctionExplaination<CR>", desc = "Function explanation" },
 	})
 
 	vim.api.nvim_create_user_command("AiGenerateDocstring", m.generate_doc_for_function, {
@@ -79,6 +78,9 @@ function m.setup(opts)
 	vim.api.nvim_create_user_command("AiGenerateFunctionExplaination", m.generate_function_explaination, {
 		bang = true,
 	})
+	if m.config.ai.serve then
+		vim.fn.jobstart("ollama serve &")
+	end
 end
 
 return m

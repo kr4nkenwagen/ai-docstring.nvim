@@ -55,7 +55,7 @@ This list will be expanded.
 ## Configuration
 ``` lua
 require("ai-docstring").setup({
-    key = "<leader>od",
+    key = "<leader>o",
     accept_key = "<leader>",
     decline_key = "q",
     renew_key = "r"
@@ -66,6 +66,7 @@ require("ai-docstring").setup({
     }
 })
 ```
+
 ### opt.ai.prompt
 This will allow the user to set their own system prompt. Use the following variables:
 
