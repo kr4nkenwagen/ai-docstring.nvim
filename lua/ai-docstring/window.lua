@@ -35,9 +35,7 @@ function w.create_output_window(action)
 		)
 	end
 	vim.api.nvim_buf_set_keymap(w.buf, "n", "q", ":q!<CR>", { noremap = true, silent = true })
-  vim.api.nvim_buf_set_keymap(w.buf, "n", "r", ":RequestsNewGeneration<CR>", { noremap = true, silent = true })
-	end
-
+	vim.api.nvim_buf_set_keymap(w.buf, "n", "r", ":RequestsNewGeneration<CR>", { noremap = true, silent = true })
 	local footer = ""
 	if w.action == w.actions.DOCSTRING then
 		footer = w.config.accept_key

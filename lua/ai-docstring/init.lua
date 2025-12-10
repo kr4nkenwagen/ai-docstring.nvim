@@ -73,6 +73,7 @@ function m.setup(opts)
 		{ m.config.key .. "d", "<cmd>AiGenerateDocstring<CR>", desc = "Function documentation" },
 		{ m.config.key .. "f", "<cmd>AiGenerateDebugLines<CR>", desc = "Function print debug lines" },
 		{ m.config.key .. "g", "<cmd>AiGenerateFunctionExplaination<CR>", desc = "Function explanation" },
+		{ m.config.key .. "b", "<cmd>AiGenerateFunction<CR>", desc = "Function generation" },
 	})
 
 	vim.api.nvim_create_user_command("AiGenerateDocstring", m.generate_doc_for_function, {
