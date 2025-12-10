@@ -4,6 +4,7 @@ w.actions = {
 	DOCSTRING = 1,
 	DEBUG_LINES = 2,
 	FUNCTION_EXPLAINATION = 3,
+	FUNCTION_GENERATION = 4,
 }
 
 function w.create_output_window(action)
@@ -34,7 +35,8 @@ function w.create_output_window(action)
 		)
 	end
 	vim.api.nvim_buf_set_keymap(w.buf, "n", "q", ":q!<CR>", { noremap = true, silent = true })
-	vim.api.nvim_buf_set_keymap(w.buf, "n", "r", ":RequestsNewGeneration<CR>", { noremap = true, silent = true })
+  vim.api.nvim_buf_set_keymap(w.buf, "n", "r", ":RequestsNewGeneration<CR>", { noremap = true, silent = true })
+	end
 
 	local footer = ""
 	if w.action == w.actions.DOCSTRING then
@@ -51,6 +53,15 @@ function w.create_output_window(action)
 			.. ": Renew generation | "
 			.. w.config.decline_key
 			.. ": Quit window"
+	elseif w.action == w.actions.FUNCTION_GENERATION then
+		footer = w.config.accept_key
+			.. ": Accept Function | "
+			.. w.config.renew_key
+			.. ": Renew generation | "
+			.. w.config.decline_key
+			.. ": Quit window"
+	elseif w.action == w.actions.DEBUG_LINES then
+		footer = w.config.accept_key .. ": Generate function | " .. w.config.decline_key .. ": Quit window"
 	elseif w.action == w.actions.FUNCTION_EXPLAINATION then
 		footer = w.config.renew_key .. ": Renew generation | " .. w.config.decline_key .. ": Quit window"
 	end
@@ -92,6 +103,11 @@ function w.save_docstring(text, dest)
 	vim.api.nvim_buf_set_text(dest, row, -1, row, -1, text)
 end
 
+function w.save_function(text, dest)
+	local row, _ = unpack(vim.api.nvim_win_get_cursor(0)) - 1
+	vim.api.nvim_buf_set_text(dest, row, -1, row, -1, text)
+end
+
 function w.save_debug_line(text, dest)
 	local functions = require("ai-docstring.utils.functions")
 	local start_line, end_line = functions.get_function()
@@ -117,6 +133,8 @@ function w.close_and_save()
 		w.save_docstring(text, dest)
 	elseif w.action == w.actions.DEBUG_LINES then
 		w.save_debug_line(text, dest)
+	elseif w.action == w.actions.FUNCTION_GENERATION then
+		w.save_function(text, dest)
 	end
 end
 return w

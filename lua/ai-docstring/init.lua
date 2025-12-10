@@ -53,6 +53,12 @@ function m.generate_function_explaination()
 	ai.query_function_explaination(table.concat(func, ""), vim.bo.filetype)
 end
 
+function m.generate_function()
+	local ai = require("ai-docstring.utils.ai-wrapper")
+	local prompt = vim.fn.input("Describe the function")
+	ai.query_function_generation(prompt, vim.bo.filetype)
+end
+
 function m.setup(opts)
 	m.config = require("ai-docstring.config")
 	opts = opts or {}
@@ -78,6 +84,10 @@ function m.setup(opts)
 	vim.api.nvim_create_user_command("AiGenerateFunctionExplaination", m.generate_function_explaination, {
 		bang = true,
 	})
+	vim.api.nvim_create_user_command("AiGenerateFunction", m.generate_function, {
+		bang = true,
+	})
+
 	if m.config.ai.serve then
 		vim.fn.jobstart("ollama serve &")
 	end
