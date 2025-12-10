@@ -67,6 +67,28 @@ function w.query_function_explaination(funct, language, win)
 	runner.run_async(cmd, win)
 end
 
+function w.query_function_generation(prompt, language, win)
+	if win == nil then
+		local window_builder = require("ai-docstring.window")
+		win = window_builder.create_output_window(window_builder.actions.FUNCTION_GENERATION)
+		win.set_language(language)
+	end
+	local config = require("ai-docstring").config
+	local query = "in $LANG write the function described. DO NOT WRITE ANYTHING BUT $LANG code. description: \n $FUNC"
+	local docstring = require("ai-docstring.templates." .. language)
+	query = query:gsub("$LANG", language)
+	query = query:gsub("$TEMPLATE", docstring.docstring)
+	query = query:gsub("$FUNC", prompt)
+	local cmd = {
+		"ollama",
+		"run",
+		config.ai.model,
+		'"' .. query .. '"',
+	}
+	local runner = require("ai-docstring.runner")
+	runner.run_async(cmd, win)
+end
+
 function w.clear_ai_chat(lines)
 	local opener = -1
 	local closer
